@@ -4,6 +4,7 @@ from models import db
 from models.product import Product
 from sqlalchemy import select
 from schemas.product_schema import product_schema
+from schemas.product_schema import products_schema
 
 products_bp = Blueprint('products', __name__)
 
@@ -16,7 +17,7 @@ def create_products():
         
     except ValidationError as e:
         return jsonify(e.messages), 400
-    print(f'this is the print statement ------>>>>{product_data}')
+    #print(f'this is the print statement ------>>>>{product_data}')
     products = Product(name = product_data['name'], price = product_data['price'])
     db.session.add(products)
     db.session.commit()
@@ -31,7 +32,7 @@ def get_products():
     products = db.session.execute(query).scalars().all()
     if not products:
         return jsonify([]),200
-    return product_schema.jsonify(products),200
+    return products_schema.jsonify(products),200
 
 # Get a product by ID
 @products_bp.route('/products/<int:product_id>', methods=['GET'])

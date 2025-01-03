@@ -5,7 +5,7 @@ from marshmallow_sqlalchemy import auto_field
 class ProductSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Product
-        load_instance = True  # This ensures `load` creates a SQLAlchemy object
+       # load_instance = True  # This ensures `load` creates a SQLAlchemy object
 
     name = auto_field()
     price = auto_field()
