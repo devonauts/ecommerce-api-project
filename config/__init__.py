@@ -1,4 +1,5 @@
 import os
+from .settings import jwtConfig
 
 class Config:
     #'mysql+mysqlconnector://root:<092560928Mu*>@localhost/ecommerce_api'
@@ -7,3 +8,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
+    

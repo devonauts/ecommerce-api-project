@@ -5,12 +5,14 @@ from sqlalchemy import select
 from models import db
 from models.user import User
 from schemas.user_schema import user_schema, users_schema
+from flask_jwt_extended import jwt_required
+
 
 users_bp = Blueprint('users', __name__)
 
 # Endpoint: Create a new user
 @users_bp.route('/users', methods=['POST'])
-
+@jwt_required()
 def create_user():
     try:
         # Validate and deserialize input JSON
@@ -27,6 +29,7 @@ def create_user():
 
 # Endpoint: Get all users
 @users_bp.route('/users', methods=['GET'])
+@jwt_required()
 def get_users():
     query = select(User)
     users = db.session.execute(query).scalars().all()
@@ -39,12 +42,14 @@ def get_users():
 
 # Endpoint: Get a user by ID
 @users_bp.route('/users/<int:id>', methods=['GET'])
+@jwt_required()
 def get_user(id):
     user = User.query.get_or_404(id)
     return user_schema.jsonify(user), 200
 
 # Endpoint: Update a user by ID
 @users_bp.route('/users/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_user(id):
     user = User.query.get_or_404(id)
     try:
@@ -57,12 +62,14 @@ def update_user(id):
     user.name = user_data.get('name', user.name)
     user.email = user_data.get('email', user.email)
     user.address = user_data.get('address', user.address)
+    user.username = user_data.get('username', user.username)
     db.session.commit()
 
     return user_schema.jsonify(user), 200
 
 # Endpoint: Delete a user by ID
 @users_bp.route('/users/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
